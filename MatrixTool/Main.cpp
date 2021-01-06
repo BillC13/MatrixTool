@@ -10,13 +10,36 @@ int main(int argc, char* argv[])
     // this program takes a matrix, either sparse or full, and multiplies it by a vector
     // It first performs this using triplet storage, and then checks this against a full matrix calculation
 
-    Matrix matrix;
+//    Matrix Matrix;
+    
 
-    //    std::string inFile1 = "full1.txt", inFile2 = "full2.txt", outFile = "results.txt";
-    std::string inFile1 = argv[1], inFile2 = argv[2], outFile = argv[3];
-    char sign = argv[4][0];
-    //    char sign = signe[0];
-    std::vector<std::vector<double>> mat1;
+//    std::string inFile1 = "full1.txt", inFile2 = "full2.txt", outFile = "results.txt";
+//     std::string inFile1 = argv[1], inFile2 = argv[2], outFile = argv[3];
+     std::string inFile1 = "big1.txt", inFile2 = "big2.txt", outFile = "results.txt";
+     char sign = '*';
+//    char sign = '+';
+    Matrix mat1(inFile1);
+    Matrix mat2(inFile2);
+    Matrix mat3 = mat1;
+ //   if(sign == '+') Matrix mat3 = mat1 + mat2;
+        switch (sign)
+        {
+        case('+'):
+            mat3 = mat1 + mat2;
+            break;
+       case('-'):
+            mat3 = mat1 - mat2;
+            break;
+        case('*'):
+            mat3 = mat1 * mat2;
+            break;
+        case('/'):
+            std::cout << "This feature is not implemented yet" << std::endl;
+            return 2;
+        }
+  
+    
+ /*   std::vector<std::vector<double>> mat1;
     switch (matrix.readFile(inFile1, mat1))
     {
     case(1):
@@ -51,9 +74,9 @@ int main(int argc, char* argv[])
         std::cout << "The matrices are the wrong sizes " << std::endl;
         return 1;
     }
-
-    matrix.printRes(mat3);
-    matrix.outRes(outFile, mat3);
-
+    */
+      mat3.printRes();
+      mat3.outRes(outFile);
+    
     return 0;
 }
