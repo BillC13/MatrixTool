@@ -1,13 +1,11 @@
-#include "Matrix.h"
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
+#include "Matrix.h"
 
-// Constructor for Any Matrix
-Matrix::Matrix(unsigned rows, unsigned cols, double z) {
+Matrix::Matrix(unsigned rows, unsigned cols, double z) { // Constructor for Any Matrix
     mrows = rows;
     mcols = cols;
     mate.resize(rows);
@@ -65,7 +63,7 @@ Matrix::Matrix(std::string filename) // Constructor - reads matrix file
     }
     else
     {
-    std::cout << "Getcha!" << std::endl;
+    std::cout << "There was an error" << std::endl;
     }
 }
 
@@ -75,34 +73,12 @@ Matrix::Matrix(const Matrix& Mat2)
     this->mrows = Mat2.getrows();
     this->mate = Mat2.mate;
 }
-/*
-Matrix::Matrix(char sign)
-{
-    switch (sign)
-    {
-    case('+'):
-         mat3 = mat1 + mat2;
-        break;
-    case('-'):
-        //        if ((mat1.size() != mat2.size()) || (mat1[0].size() != mat2[0].size())) return 3;
-        //        mat3 = mat1 + mat2;
-        break;
-    case('*'):
-        //        if ((mat1.size() != mat2[0].size())) return 3;
-        //        mat3 = mat1 + mat2;
-        break;
-    case('/'):
-        //        if ((mat1.size() != mat1[0].size()) || (mat2.size() != mat2[0].size()) || (mat1.size() != mat2.size())) return 3;
-        return 2;
-    }
-    return 0;
-}
-*/
+
 Matrix::~Matrix() {
 
 }
 
-Matrix Matrix::operator+(Matrix& mat2)
+Matrix Matrix::operator+(Matrix& mat2) // Matrix addition
 {
     Matrix result(mcols, mrows, 0.0);
     for (unsigned i = 0; i < mrows; i++)
@@ -115,7 +91,7 @@ Matrix Matrix::operator+(Matrix& mat2)
     return result;
 }
 
-Matrix Matrix::operator-(Matrix& mat2)
+Matrix Matrix::operator-(Matrix& mat2) // Matrix subtraction
 {
     Matrix result(mcols, mrows, 0.0);
     for (unsigned i = 0; i < mrows; i++)
@@ -128,7 +104,7 @@ Matrix Matrix::operator-(Matrix& mat2)
     return result;
 }
 
-Matrix Matrix::operator*(Matrix& mat2)
+Matrix Matrix::operator*(Matrix& mat2) // Matrix multiplication
 {
     Matrix result(mcols, mrows, 0.0);
     for (unsigned i = 0; i < mrows; i++)
@@ -144,59 +120,6 @@ Matrix Matrix::operator*(Matrix& mat2)
     return result;
 }
 
-/*
-int Matrix::matAdd(std::vector<std::vector<double>> mat1, std::vector<std::vector<double>> mat2, std::vector<std::vector<double>>& mat3) // Adds matrices
-{
-    for (int i = 0; i < mcols; i++)
-    {
-        std::vector<double> temp;
-        for (int j = 0; j < mrows; j++)
-        {
-            temp.push_back(mat1[i][j] + mat2[i][j]);
-        }
-        mat3.push_back(temp);
-    }
-    return 0;
-}
-
-int Matrix::matSub(std::vector<std::vector<double>> mat1, std::vector<std::vector<double>> mat2, std::vector<std::vector<double>>& mat3) // Subtracts matrices
-{
-    for (int i = 0; i < mcols; i++)
-    {
-        std::vector<double> temp;
-        for (int j = 0; j < mrows; j++)
-        {
-            temp.push_back(mat1[i][j] - mat2[i][j]);
-        }
-        mat3.push_back(temp);
-    }
-    return 0;
-}
-
-int Matrix::matMul(std::vector<std::vector<double>> mat1, std::vector<std::vector<double>> mat2, std::vector<std::vector<double>>& mat3) // Multiplies matrices
-{
-    for (int i = 0; i < mcols; i++)
-    {
-        std::vector<double> temp;
-        for (int j = 0; j < mrows; j++)
-        {
-            double madd = 0;
-            for (int m = 0; m < mcols; m++)
-            {
-                madd += (mat1[i][m] + mat2[m][j]);
-            }
-            temp.push_back(madd);
-        }
-        mat3.push_back(temp);
-    }
-    return 0;
-}
-
-int Matrix::matDiv(std::vector<std::vector<double>> mat1, std::vector<std::vector<double>> mat2, std::vector<std::vector<double>>& mat3) // I'm not doing this
-{
-    return 0;
-}
-*/
 void Matrix::printRes() const // Print the result
 { 
     std::cout << "The result is" << std::endl;
@@ -224,20 +147,17 @@ void Matrix::outRes(std::string filename) const // Write the result
     myfile.close();
 }
 
-// Returns matrix value at given location
-double& Matrix::operator()(const unsigned& row, const unsigned& col)
+double& Matrix::operator()(const unsigned& row, const unsigned& col) // Returns matrix value at given location
 {
     return this->mate[row][col];
 }
 
-// Return row
-unsigned Matrix::getrows() const
+unsigned Matrix::getrows() const // Return row
 {
     return this->mrows;
 }
 
-// Return column
-unsigned Matrix::getcols() const
+unsigned Matrix::getcols() const // Return column
 {
     return this->mcols;
 }
