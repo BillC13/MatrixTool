@@ -5,13 +5,13 @@
 #include <sstream>
 #include "Matrix.h"
 
-Matrix::Matrix(unsigned rows, unsigned cols, double z) { // Constructor for Any Matrix
+Matrix::Matrix(unsigned int rows, unsigned int cols) { // Constructor for Any Matrix
     mrows = rows;
     mcols = cols;
     mate.resize(rows);
-    for (unsigned i = 0; i < mate.size(); i++)
+    for (unsigned int i = 0; i < mate.size(); i++)
     {
-        mate[i].resize(cols, z);
+        mate[i].resize(cols, 0);
     }
 }
 
@@ -35,11 +35,12 @@ Matrix::Matrix(std::string filename) // Constructor - reads matrix file
         }
         else if (xy.size() == 2)
         {
-        mrows = xy[1];
+            mrows = xy[1];
         }
         else
         {
-        std::cout << "Getcha!" << std::endl;
+            std::cout << "The matrix dimensions are wrong" << std::endl;
+            exit(1);
         }
 
         int rows = mrows, cols = mcols;
@@ -51,9 +52,9 @@ Matrix::Matrix(std::string filename) // Constructor - reads matrix file
             mate[i].resize(cols);
         }
 
-        for (unsigned i = 0; i < mcols; i++)
+        for (unsigned int i = 0; i < mrows; i++)
         {
-            for (unsigned j = 0; j < mrows; j++)
+            for (unsigned int j = 0; j < mcols; j++)
             {
                 myfile >> z;
                 mate[i][j] = z;
@@ -63,29 +64,36 @@ Matrix::Matrix(std::string filename) // Constructor - reads matrix file
     }
     else
     {
-    std::cout << "There was an error" << std::endl;
+        std::cout << "There was an error reading the matrix file" << std::endl;
+        exit(1);
     }
 }
 
 Matrix::Matrix(const Matrix& Mat2)
 {
-    this->mcols = Mat2.getcols();
-    this->mrows = Mat2.getrows();
-    this->mate = Mat2.mate;
+    mrows = Mat2.getrows();
+    mcols = Mat2.getcols();
+    mate = Mat2.mate;
 }
 
-Matrix::~Matrix() {
+Matrix::~Matrix()
+{
 
 }
 
 Matrix Matrix::operator+(Matrix& mat2) // Matrix addition
 {
-    Matrix result(mcols, mrows, 0.0);
-    for (unsigned i = 0; i < mrows; i++)
+    if (mcols != mat2.getcols() || mrows != mat2.getrows())
     {
-        for (unsigned j = 0; j < mcols; j++)
+        std::cout << "Matrices are the wrong size!" << std::endl;
+        exit(1);
+    }
+    Matrix result(mcols, mrows);
+    for (unsigned int i = 0; i < mrows; i++)
+    {
+        for (unsigned int j = 0; j < mcols; j++)
         {
-            result(i, j) = this->mate[i][j] + mat2(i, j);
+            result(i, j) = mate[i][j] + mat2(i, j);
         }
     }
     return result;
@@ -93,12 +101,17 @@ Matrix Matrix::operator+(Matrix& mat2) // Matrix addition
 
 Matrix Matrix::operator-(Matrix& mat2) // Matrix subtraction
 {
-    Matrix result(mcols, mrows, 0.0);
-    for (unsigned i = 0; i < mrows; i++)
+    if (mcols != mat2.getcols() || mrows != mat2.getrows())
     {
-        for (unsigned j = 0; j < mcols; j++)
+        std::cout << "Matrices are the wrong size!" << std::endl;
+        exit(1);
+    }
+    Matrix result(mcols, mrows);
+    for (unsigned int i = 0; i < mrows; i++)
+    {
+        for (unsigned int j = 0; j < mcols; j++)
         {
-            result(i, j) = this->mate[i][j] - mat2(i, j);
+            result(i, j) = mate[i][j] - mat2(i, j);
         }
     }
     return result;
@@ -106,14 +119,19 @@ Matrix Matrix::operator-(Matrix& mat2) // Matrix subtraction
 
 Matrix Matrix::operator*(Matrix& mat2) // Matrix multiplication
 {
-    Matrix result(mcols, mrows, 0.0);
-    for (unsigned i = 0; i < mrows; i++)
+    if (mcols != mat2.getrows())
     {
-        for (unsigned j = 0; j < mcols; j++)
+        std::cout << "Matrices are the wrong size!" << std::endl;
+        exit(1);
+    }
+    Matrix result(mcols, mrows);
+    for (unsigned int i = 0; i < mrows; i++)
+    {
+        for (unsigned int j = 0; j < mcols; j++)
         {
-            for (unsigned k = 0; k < mrows; k++)
+            for (unsigned int k = 0; k < mrows; k++)
             {
-                result(i, j) += this->mate[i][k] * mat2(k, j);
+                result(i, j) += mate[i][k] * mat2(k, j);
             }
         }
     }
@@ -123,9 +141,9 @@ Matrix Matrix::operator*(Matrix& mat2) // Matrix multiplication
 void Matrix::printRes() const // Print the result
 { 
     std::cout << "The result is" << std::endl;
-    for (unsigned i = 0; i < mrows; i++)
+    for (unsigned int i = 0; i < mrows; i++)
     {
-        for (unsigned j = 0; j < mcols; j++)
+        for (unsigned int j = 0; j < mcols; j++)
         {
             std::cout << mate[i][j] << " ";
         }
@@ -136,9 +154,9 @@ void Matrix::printRes() const // Print the result
 void Matrix::outRes(std::string filename) const // Write the result
 { 
     std::ofstream myfile(filename);
-    for (unsigned i = 0; i < mcols; i++)
+    for (unsigned int i = 0; i < mrows; i++)
     {
-        for (unsigned j = 0; j < mrows; j++)
+        for (unsigned int j = 0; j < mcols; j++)
         {
             myfile << mate[i][j] << " ";
         }
@@ -147,17 +165,17 @@ void Matrix::outRes(std::string filename) const // Write the result
     myfile.close();
 }
 
-double& Matrix::operator()(const unsigned& row, const unsigned& col) // Returns matrix value at given location
+double& Matrix::operator()(const unsigned int& row, const unsigned int& col) // Returns matrix value at given location
 {
-    return this->mate[row][col];
+    return mate[row][col];
 }
 
-unsigned Matrix::getrows() const // Return row
+unsigned int Matrix::getrows() const // Return row
 {
-    return this->mrows;
+    return mrows;
 }
 
-unsigned Matrix::getcols() const // Return column
+unsigned int Matrix::getcols() const // Return column
 {
-    return this->mcols;
+    return mcols;
 }

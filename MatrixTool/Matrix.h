@@ -7,19 +7,19 @@
 
 class Matrix {
 private:
-	std::vector<std::vector<double>> mate;	
+	std::vector<std::vector<double>> mate;
+	unsigned int mrows;
+	unsigned int mcols;
 
 public:
 	// Matrix stuff and functions
-	unsigned mrows;
-	unsigned mcols;
-	unsigned getrows() const;
-	unsigned getcols() const;
-	double& operator()(const unsigned&, const unsigned&);
-	Matrix(unsigned, unsigned, double);
-	Matrix(std::string);
-	Matrix(const Matrix&);
-	Matrix(char);
+	
+	unsigned int getrows() const;
+	unsigned int getcols() const;
+	double& operator()(const unsigned int& rows, const unsigned int& cols);
+	Matrix(unsigned int rows, unsigned int cols);
+	Matrix(std::string Filname);
+	Matrix(const Matrix& mat2);
 	~Matrix();
 
 	// Operators
