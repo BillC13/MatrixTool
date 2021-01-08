@@ -15,7 +15,7 @@ Matrix::Matrix(unsigned int rows, unsigned int cols) { // Constructor for Any Ma
     }
 }
 
-Matrix::Matrix(std::string filename) // Constructor - reads matrix file
+int Matrix::readFile(std::string filename) // Constructor - reads matrix file
 {
     // Check to see if input file exists
     std::ifstream myfile(filename);
@@ -39,8 +39,7 @@ Matrix::Matrix(std::string filename) // Constructor - reads matrix file
         }
         else
         {
-            std::cout << "The matrix dimensions are wrong" << std::endl;
-            exit(1);
+            return 2;
         }
 
         int rows = mrows, cols = mcols;
@@ -64,9 +63,9 @@ Matrix::Matrix(std::string filename) // Constructor - reads matrix file
     }
     else
     {
-        std::cout << "There was an error reading the matrix file" << std::endl;
-        exit(1);
+        return 1;
     }
+    return 0;
 }
 
 Matrix::Matrix(const Matrix& Mat2)
@@ -179,3 +178,14 @@ unsigned int Matrix::getcols() const // Return column
 {
     return mcols;
 }
+
+int Matrix::readSign(char sign, Matrix mat1, Matrix mat2) // Check sign and dimensions
+{
+    unsigned int r1 = mat1.getrows(), r2 = mat1.getrows(), c1 = mat1.getcols(), c2 = mat2.getcols();
+    if (((sign == '+' || sign == '-') && ((r1 != r2) || (c1 != c2))) || ((sign == '*') && (r1 != c2)))
+        {
+            return 1;
+        }
+    return 0;
+}
+  
