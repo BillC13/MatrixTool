@@ -179,13 +179,27 @@ unsigned int Matrix::getcols() const // Return column
     return mcols;
 }
 
-int Matrix::readSign(char sign, Matrix mat1, Matrix mat2) // Check sign and dimensions
+int Matrix::readSign(char sign, Matrix mat1, Matrix mat2, Matrix mat3) // Check sign and dimensions
 {
     unsigned int r1 = mat1.getrows(), r2 = mat1.getrows(), c1 = mat1.getcols(), c2 = mat2.getcols();
     if (((sign == '+' || sign == '-') && ((r1 != r2) || (c1 != c2))) || ((sign == '*') && (r1 != c2)))
         {
             return 1;
         }
+    switch (sign)
+    {
+    case('+'):
+        mat3 = mat1 + mat2;
+        break;
+    case('-'):
+        mat3 = mat1 - mat2;
+        break;
+    case('*'):
+        mat3 = mat1 * mat2;
+        break;
+    case('/'):
+        return 2;
+    }
     return 0;
 }
   
