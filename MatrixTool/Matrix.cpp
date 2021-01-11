@@ -5,6 +5,10 @@
 #include <sstream>
 #include "Matrix.h"
 
+Matrix::Matrix() { // Constructor for Any Matrix
+
+}
+
 Matrix::Matrix(unsigned int rows, unsigned int cols) { // Constructor for Any Matrix
     mrows = rows;
     mcols = cols;
@@ -20,51 +24,46 @@ int Matrix::readFile(std::string filename) // Constructor - reads matrix file
     // Check to see if input file exists
     std::ifstream myfile(filename);
     mcols = 0, mrows = 0;
-    if (myfile.is_open())
+    if (!myfile.is_open()) return 1;
+    
+    // Open the input file
+    std::string dim;
+    (getline(myfile, dim));
+    std::stringstream dims(dim);
+    std::vector<int> xy{ std::istream_iterator<int>(dims), std::istream_iterator<int>() };
+    mcols = xy[0];
+
+    if (xy.size() == 1)
     {
-        // Open the input file
-        std::string dim;
-        (getline(myfile, dim));
-        std::stringstream dims(dim);
-        std::vector<int> xy{ std::istream_iterator<int>(dims), std::istream_iterator<int>() };
-        mcols = xy[0];
-
-        if (xy.size() == 1)
-        {
-            mrows = mcols;
-        }
-        else if (xy.size() == 2)
-        {
-            mrows = xy[1];
-        }
-        else
-        {
-            return 2;
-        }
-
-        int rows = mrows, cols = mcols;
-        double z;
-
-        mate.resize(rows);
-        for (int i = 0; i < rows; i++)
-        {
-            mate[i].resize(cols);
-        }
-
-        for (unsigned int i = 0; i < mrows; i++)
-        {
-            for (unsigned int j = 0; j < mcols; j++)
-            {
-                myfile >> z;
-                mate[i][j] = z;
-            }
-        }
-        myfile.close();    //close the file object. 
+        mrows = mcols;
+    }
+    else if (xy.size() == 2)
+    {
+        mrows = xy[1];
     }
     else
     {
-        return 1;
+        return 2;
     }
+
+    int rows = mrows, cols = mcols;
+    double z;
+
+    mate.resize(rows);
+    for (int i = 0; i < rows; i++)
+    {
+        mate[i].resize(cols);
+    }
+
+    for (unsigned int i = 0; i < mrows; i++)
+    {
+        for (unsigned int j = 0; j < mcols; j++)
+        {
+            myfile >> z;
+            mate[i][j] = z;
+        }
+    }
+    myfile.close();    //close the file object. 
     return 0;
 }
 
@@ -82,11 +81,6 @@ Matrix::~Matrix()
 
 Matrix Matrix::operator+(Matrix& mat2) // Matrix addition
 {
-    if (mcols != mat2.getcols() || mrows != mat2.getrows())
-    {
-        std::cout << "Matrices are the wrong size!" << std::endl;
-        exit(1);
-    }
     Matrix result(mcols, mrows);
     for (unsigned int i = 0; i < mrows; i++)
     {
@@ -100,11 +94,6 @@ Matrix Matrix::operator+(Matrix& mat2) // Matrix addition
 
 Matrix Matrix::operator-(Matrix& mat2) // Matrix subtraction
 {
-    if (mcols != mat2.getcols() || mrows != mat2.getrows())
-    {
-        std::cout << "Matrices are the wrong size!" << std::endl;
-        exit(1);
-    }
     Matrix result(mcols, mrows);
     for (unsigned int i = 0; i < mrows; i++)
     {
@@ -118,11 +107,6 @@ Matrix Matrix::operator-(Matrix& mat2) // Matrix subtraction
 
 Matrix Matrix::operator*(Matrix& mat2) // Matrix multiplication
 {
-    if (mcols != mat2.getrows())
-    {
-        std::cout << "Matrices are the wrong size!" << std::endl;
-        exit(1);
-    }
     Matrix result(mcols, mrows);
     for (unsigned int i = 0; i < mrows; i++)
     {

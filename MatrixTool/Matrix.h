@@ -21,6 +21,7 @@ public:
 	double& operator()(const unsigned int& rows, const unsigned int& cols);
 	Matrix(unsigned int rows, unsigned int cols);
 	Matrix(const Matrix& mat2);
+	Matrix();
 	~Matrix();
 
 	// Operators
